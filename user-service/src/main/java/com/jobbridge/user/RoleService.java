@@ -1,0 +1,9 @@
+package com.jobbridge.user;
+
+import java.util.List;
+
+public interface RoleService {
+    void create(RoleDto roleDto);
+    List<RoleDto> getAll();
+    RoleDto getByName(String roleName);
+}
