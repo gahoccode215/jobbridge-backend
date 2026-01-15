@@ -1,7 +1,8 @@
-package com.jobbridge.gateway;
+package com.jobbridge.gateway.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
@@ -12,17 +13,12 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
 
         http
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
-
+                .csrf(csrf -> csrf.disable())
                 .authorizeExchange(exchange -> exchange
-
-                        // Cho phép login/refresh không cần token
                         .pathMatchers("/api/auth/**").permitAll()
-
-                        // Các API còn lại phải có JWT
+                        .pathMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyExchange().authenticated()
                 )
-
                 .oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(jwt -> {})
                 );

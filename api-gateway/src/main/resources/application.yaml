@@ -2,9 +2,6 @@ server:
   port: 8080
 
 spring:
-  application:
-    name: api-gateway
-
   security:
     oauth2:
       resourceserver:
@@ -13,40 +10,32 @@ spring:
 
   cloud:
     gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins:
-              - "http://localhost:5173"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-            allowedHeaders: "*"
-            allowCredentials: true
+      server:
+        webflux:
+          routes:
 
-      routes:
+            - id: auth-route
+              uri: http://localhost:9080
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                - StripPrefix=2
 
-        # Route tới User Service
-        - id: user-service
-          uri: http://localhost:8081
-          predicates:
-            - Path=/api/users/**
+            - id: user-service
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/users/**
 
-        # Login (forward tới Keycloak)
-        - id: auth-login
-          uri: http://localhost:9080
-          predicates:
-            - Path=/api/auth/login
-          filters:
-            - RewritePath=/api/auth/login, /realms/test/protocol/openid-connect/token
-
-        # Refresh token
-        - id: auth-refresh
-          uri: http://localhost:9080
-          predicates:
-            - Path=/api/auth/refresh
-          filters:
-            - RewritePath=/api/auth/refresh, /realms/test/protocol/openid-connect/token
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - "http://localhost:5173"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders: "*"
+                allowCredentials: true
