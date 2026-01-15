@@ -1,7 +1,9 @@
 package com.jobbridge.user.controller;
 
 import com.jobbridge.user.dto.UserDTO;
+import com.jobbridge.user.dto.request.LoginRequest;
 import com.jobbridge.user.dto.request.RegisterRequest;
+import com.jobbridge.user.dto.response.LoginResponse;
 import com.jobbridge.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,9 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@RequestBody RegisterRequest registerRequest) {
         UserDTO userDTO = authService.register(registerRequest);
         return ResponseEntity.ok(userDTO);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.login(request));
     }
 }
