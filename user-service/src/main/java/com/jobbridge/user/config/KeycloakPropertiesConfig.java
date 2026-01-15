@@ -1,4 +1,4 @@
-package com.jobbridge.user;
+package com.jobbridge.user.config;
 
 import lombok.Data;
 import lombok.Getter;

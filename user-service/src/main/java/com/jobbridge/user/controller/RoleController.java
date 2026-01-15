@@ -1,5 +1,7 @@
-package com.jobbridge.user;
+package com.jobbridge.user.controller;
 
+import com.jobbridge.user.dto.RoleDTO;
+import com.jobbridge.user.service.RoleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +19,14 @@ public class RoleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RoleDto>> findAll() {
-        var roles = roleService.getAll();
+    public ResponseEntity<List<RoleDTO>> findAll() {
+        var roles = roleService.getAllRoles();
         return ResponseEntity.ok(roles);
     }
 
     @PostMapping
-    public ResponseEntity<Void> createRole(@RequestBody RoleDto roleDto) {
-        roleService.create(roleDto);
+    public ResponseEntity<Void> createRole(@RequestBody RoleDTO roleDto) {
+        roleService.createRole(roleDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
