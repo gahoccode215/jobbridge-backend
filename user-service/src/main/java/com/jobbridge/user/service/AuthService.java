@@ -7,5 +7,4 @@ import com.jobbridge.user.dto.response.LoginResponse;
 
 public interface AuthService {
     UserDTO register(RegisterRequest registerRequest);
-    LoginResponse login(LoginRequest request);
 }

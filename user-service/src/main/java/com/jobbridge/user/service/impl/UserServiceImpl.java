@@ -2,11 +2,16 @@ package com.jobbridge.user.service.impl;
 
 import com.jobbridge.user.config.KeycloakPropertiesConfig;
 import com.jobbridge.user.dto.UserDTO;
+import com.jobbridge.user.dto.response.UserProfileResponse;
+import com.jobbridge.user.entity.User;
+import com.jobbridge.user.repository.UserRepository;
 import com.jobbridge.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private final Keycloak keycloak;
     private final KeycloakPropertiesConfig propertiesConfig;
+    private final UserRepository userRepository;
 
     private UsersResource usersResourceInstance() {
         return keycloak.realm(propertiesConfig.getRealm()).users();
@@ -25,6 +31,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> getAllUsers() {
         return usersResourceInstance().list().stream().map(this::mapToUserDto).toList();
+    }
+
+    @Override
+    public UserProfileResponse getCurrentUser(Authentication authentication) {
+
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+
+        String email = jwt.getClaim("email");
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return UserProfileResponse.builder()
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .build();
     }
 
     private UserDTO mapToUserDto(UserRepresentation userRepresentation) {

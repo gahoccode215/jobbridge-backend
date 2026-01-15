@@ -5,6 +5,8 @@ import com.jobbridge.user.dto.UserDTO;
 import com.jobbridge.user.dto.request.LoginRequest;
 import com.jobbridge.user.dto.request.RegisterRequest;
 import com.jobbridge.user.dto.response.LoginResponse;
+import com.jobbridge.user.entity.User;
+import com.jobbridge.user.repository.UserRepository;
 import com.jobbridge.user.service.AuthService;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -30,50 +33,54 @@ public class AuthServiceImpl implements AuthService {
 
     private final Keycloak keycloak;
     private final KeycloakPropertiesConfig propertiesConfig;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final UserRepository userRepository;
 
     private UsersResource usersResourceInstance() {
         return keycloak.realm(propertiesConfig.getRealm()).users();
     }
 
     @Override
-    public UserDTO register(RegisterRequest registerRequest) {
-        var userRepresentation = buildUserRepresentation(registerRequest);
-         usersResourceInstance().create(userRepresentation);
+    public UserDTO register(RegisterRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
 
-        return mapToUserDTO(userRepresentation);
-    }
+        // ===== 1. Create user in Keycloak =====
+        UserRepresentation user = new UserRepresentation();
 
-    @Override
-    public LoginResponse login(LoginRequest request) {
+        user.setUsername(request.getEmail());   // email làm username
+        user.setEmail(request.getEmail());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEnabled(true);
 
-        String tokenUrl = propertiesConfig.getEndpoint()
-                + "/realms/" + propertiesConfig.getRealm()
-                + "/protocol/openid-connect/token";
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.PASSWORD);
+        credential.setValue(request.getPassword());
+        credential.setTemporary(false);
 
-        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-        form.add("grant_type", "password");
-        form.add("client_id", "test");
-        form.add("client_secret", propertiesConfig.getApplication().getClientSecret()); // nếu confidential
-        form.add("username", request.getIdentifier());
-        form.add("password", request.getPassword());
+        user.setCredentials(List.of(credential));
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        var response = keycloak.realm("test")
+                .users()
+                .create(user);
 
-        HttpEntity<?> entity = new HttpEntity<>(form, headers);
+        String keycloakId = response.getLocation()
+                .getPath()
+                .replaceAll(".*/([^/]+)$", "$1");
 
-        ResponseEntity<Map> response =
-                restTemplate.postForEntity(tokenUrl, entity, Map.class);
-
-        Map body = response.getBody();
-
-        return LoginResponse.builder()
-                .accessToken((String) body.get("access_token"))
-                .refreshToken((String) body.get("refresh_token"))
-                .expiresIn((Integer) body.get("expires_in"))
+        // ===== 2. Save to MySQL =====
+        User newUser = User.builder()
+                .email(request.getEmail())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .keycloakId(keycloakId)
                 .build();
+
+         userRepository.save(newUser);
+         return mapToUserDTO(user);
     }
+
 
     private UserDTO mapToUserDTO(UserRepresentation userRepresentation) {
         return UserDTO.builder()
@@ -85,22 +92,5 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    private UserRepresentation buildUserRepresentation(RegisterRequest registerRequest) {
-        UserRepresentation userRepresentation  = new UserRepresentation();
-        userRepresentation.setUsername(registerRequest.getUsername());
-        userRepresentation.setCredentials(Collections.singletonList(buildCredentialRepresentation(registerRequest.getPassword())));
-        userRepresentation.setEnabled(true);
-        userRepresentation.setEmail(registerRequest.getEmail());
-        userRepresentation.setFirstName(registerRequest.getFirstName());
-        userRepresentation.setLastName(registerRequest.getLastName());
-        userRepresentation.setEmailVerified(true);
-        return userRepresentation ;
-    }
-    private CredentialRepresentation buildCredentialRepresentation(String password) {
-        CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-        credentialRepresentation.setTemporary(false);
-        credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
-        credentialRepresentation.setValue(password);
-        return credentialRepresentation;
-    }
+
 }

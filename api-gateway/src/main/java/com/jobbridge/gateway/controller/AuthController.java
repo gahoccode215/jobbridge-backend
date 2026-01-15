@@ -30,7 +30,7 @@ public class AuthController {
         form.add("grant_type", "password");
         form.add("client_id", CLIENT_ID);
         form.add("client_secret", CLIENT_SECRET);
-        form.add("username", request.getIdentifier());
+        form.add("username", request.getEmail());
         form.add("password", request.getPassword());
 
         HttpHeaders headers = new HttpHeaders();
