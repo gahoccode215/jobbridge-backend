@@ -1,0 +1,73 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+.DS_Store
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# OS specific files
+Thumbs.db
+*~
+
+# Java compiled files
+*.class
+
+# Package files
+*.jar
+*.war
+*.nar
+*.ear
+
+# Virtual machine crash logs
+hs_err_pid*
+
+# Environment files
+.env.user
+.env.gateway
+.env.notification
+.env.local
+.env.*.local
+
+# No parent pom needed
+# Each service is independent
+/.env.gateway
+/.env.notification
+/.env.user
+/.env.product
+/.env.order
+/*.reward
+/*.event
+/.env.event
+/.env.reward
+/.env.ai
+/ai-service/src/main/resources/*.json

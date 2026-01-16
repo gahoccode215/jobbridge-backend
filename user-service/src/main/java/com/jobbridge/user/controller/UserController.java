@@ -5,6 +5,7 @@ import com.jobbridge.user.dto.response.UserProfileResponse;
 import com.jobbridge.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,4 +29,9 @@ public class UserController {
         return userService.getCurrentUser(authentication);
     }
 
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminOnly() {
+        return "Only admin can access";
+    }
 }
