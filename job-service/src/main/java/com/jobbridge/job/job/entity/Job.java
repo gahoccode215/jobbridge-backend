@@ -49,6 +49,13 @@ public class Job {
 
     private LocalDateTime updatedAt;
 
+    @Column(columnDefinition = "TEXT")
+    private String rejectReason;
+
+    private String approvedBy;
+
+    private LocalDateTime approvedAt;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

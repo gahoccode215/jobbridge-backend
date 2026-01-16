@@ -2,6 +2,7 @@ package com.jobbridge.job.job.controller;
 
 import com.jobbridge.job.job.dto.request.JobCreateRequest;
 import com.jobbridge.job.job.dto.request.JobUpdateRequest;
+import com.jobbridge.job.job.dto.request.RejectJobRequest;
 import com.jobbridge.job.job.entity.Job;
 import com.jobbridge.job.job.enums.JobStatus;
 import com.jobbridge.job.job.service.JobService;
@@ -36,11 +37,6 @@ public class JobController {
         jobService.deleteJob(id);
     }
 
-    @PutMapping("/{id}/status")
-    public void changeStatus(@PathVariable Long id,
-                             @RequestParam JobStatus status) {
-        jobService.changeStatusJob(status, id);
-    }
 
     @GetMapping
     public List<Job> getAllJobs() {
@@ -52,5 +48,22 @@ public class JobController {
             @RequestParam String keyword) {
 
         return jobSearchService.search(keyword);
+    }
+
+    @PutMapping("/{id}/submit")
+    public void submitJob(@PathVariable Long id) {
+        jobService.submitJob(id);
+    }
+
+    @PutMapping("/{id}/approve")
+    public void approveJob(@PathVariable Long id,
+                           @RequestParam String adminId) {
+        jobService.approveJob(id, adminId);
+    }
+
+    @PutMapping("/{id}/reject")
+    public void rejectJob(@PathVariable Long id,
+                          @RequestBody RejectJobRequest request) {
+        jobService.rejectJob(id, request);
     }
 }
