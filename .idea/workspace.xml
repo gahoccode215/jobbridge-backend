@@ -5,8 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a206a61-a2d6-4cbe-9dde-38ccbb78b48a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/config/SwaggerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/controller/JobController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/dto/request/JobCreateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/dto/request/JobUpdateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/dto/response/JobResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/entity/Job.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/enums/JobStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/enums/JobType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/exception/JobNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/repository/JobRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/service/JobService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/service/impl/JobServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/jobbridge/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/jobbridge/user/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/job-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/job-service/src/main/resources/application.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,10 +52,10 @@
     &quot;accountId&quot;: &quot;e3519b62-5c6b-49ae-88ac-b75193c60ed1&quot;
   }
 }</component>
-  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -77,11 +93,22 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
+    "run.configurations.included.in.services": "true",
     "settings.editor.selected.configurable": "preferences.pathVariables",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Spring Boot.UserServiceApplication">
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="KtorApplicationConfigurationType" />
+        <option value="MicronautRunConfigurationType" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.JobServiceApplication">
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
         <option name="Make" enabled="true" />
@@ -94,6 +121,13 @@
     <configuration name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="api-gateway" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.jobbridge.gateway.ApiGatewayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JobServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="job-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.jobbridge.job.JobServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -126,6 +160,7 @@
       <workItem from="1768422687365" duration="175000" />
       <workItem from="1768422989039" duration="27000" />
       <workItem from="1768500234053" duration="5826000" />
+      <workItem from="1768558108362" duration="1430000" />
     </task>
     <servers />
   </component>
