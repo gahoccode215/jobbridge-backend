@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a206a61-a2d6-4cbe-9dde-38ccbb78b48a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/dto/request/RejectJobRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/common/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/common/response/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/common/response/Meta.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/common/response/ResponseFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/controller/JobController.java" beforeDir="false" afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/controller/JobController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/entity/Job.java" beforeDir="false" afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/entity/Job.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/service/JobService.java" beforeDir="false" afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/service/JobService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/service/impl/JobServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/job-service/src/main/java/com/jobbridge/job/job/service/impl/JobServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +161,8 @@
       <workItem from="1768500234053" duration="5826000" />
       <workItem from="1768558108362" duration="2194000" />
       <workItem from="1768584040009" duration="966000" />
-      <workItem from="1768586917042" duration="2859000" />
+      <workItem from="1768586917042" duration="3653000" />
+      <workItem from="1768595344264" duration="433000" />
     </task>
     <servers />
   </component>
