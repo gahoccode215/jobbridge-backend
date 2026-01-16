@@ -5,6 +5,8 @@ import com.jobbridge.job.job.dto.request.JobUpdateRequest;
 import com.jobbridge.job.job.entity.Job;
 import com.jobbridge.job.job.enums.JobStatus;
 import com.jobbridge.job.job.service.JobService;
+import com.jobbridge.job.search.document.JobDocument;
+import com.jobbridge.job.search.service.JobSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public class JobController {
 
     private final JobService jobService;
+    private final JobSearchService jobSearchService;
 
     @PostMapping
     public void createJob(@RequestBody JobCreateRequest request) {
@@ -42,5 +45,12 @@ public class JobController {
     @GetMapping
     public List<Job> getAllJobs() {
         return jobService.getAllJobs();
+    }
+
+    @GetMapping("/search")
+    public List<JobDocument> searchJobs(
+            @RequestParam String keyword) {
+
+        return jobSearchService.search(keyword);
     }
 }

@@ -7,6 +7,7 @@ import com.jobbridge.job.job.enums.JobStatus;
 import com.jobbridge.job.job.exception.JobNotFoundException;
 import com.jobbridge.job.job.repository.JobRepository;
 import com.jobbridge.job.job.service.JobService;
+import com.jobbridge.job.search.service.JobIndexService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class JobServiceImpl implements JobService {
 
     private final JobRepository jobRepository;
+    private final JobIndexService jobIndexService;
 
     @Override
     public void createJob(JobCreateRequest request) {
@@ -32,7 +34,9 @@ public class JobServiceImpl implements JobService {
                 .expiredAt(request.getExpiredAt())
                 .build();
 
-        jobRepository.save(job);
+        Job savedJob = jobRepository.save(job);
+
+        jobIndexService.indexJob(savedJob);
     }
 
     @Override
@@ -50,6 +54,8 @@ public class JobServiceImpl implements JobService {
         job.setExpiredAt(request.getExpiredAt());
 
         jobRepository.save(job);
+
+        jobIndexService.indexJob(job);
     }
 
     @Override
