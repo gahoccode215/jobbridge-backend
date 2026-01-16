@@ -1,6 +1,8 @@
 package com.jobbridge.job.job.service;
 
+import com.jobbridge.job.common.response.PageResponse;
 import com.jobbridge.job.job.dto.request.JobCreateRequest;
+import com.jobbridge.job.job.dto.request.JobFilterRequest;
 import com.jobbridge.job.job.dto.request.JobUpdateRequest;
 import com.jobbridge.job.job.dto.request.RejectJobRequest;
 import com.jobbridge.job.job.entity.Job;
@@ -20,5 +22,9 @@ public interface JobService {
     void approveJob(Long jobId, String adminId);
 
     void rejectJob(Long jobId, RejectJobRequest request);
-
+    PageResponse<Job> filterJobs(
+            JobFilterRequest filter,
+            int page,
+            int size
+    );
 }

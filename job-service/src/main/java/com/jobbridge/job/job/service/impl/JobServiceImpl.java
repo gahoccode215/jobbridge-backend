@@ -1,6 +1,8 @@
 package com.jobbridge.job.job.service.impl;
 
+import com.jobbridge.job.common.response.PageResponse;
 import com.jobbridge.job.job.dto.request.JobCreateRequest;
+import com.jobbridge.job.job.dto.request.JobFilterRequest;
 import com.jobbridge.job.job.dto.request.JobUpdateRequest;
 import com.jobbridge.job.job.dto.request.RejectJobRequest;
 import com.jobbridge.job.job.entity.Job;
@@ -8,8 +10,13 @@ import com.jobbridge.job.job.enums.JobStatus;
 import com.jobbridge.job.job.exception.JobNotFoundException;
 import com.jobbridge.job.job.repository.JobRepository;
 import com.jobbridge.job.job.service.JobService;
+import com.jobbridge.job.job.specification.JobSpecification;
 import com.jobbridge.job.search.service.JobIndexService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -127,6 +134,30 @@ public class JobServiceImpl implements JobService {
 
         jobRepository.save(job);
     }
+
+    @Override
+    public PageResponse<Job> filterJobs(JobFilterRequest filter, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Specification<Job> spec = Specification
+                .where(JobSpecification.hasKeyword(filter.getKeyword()))
+                .and(JobSpecification.hasLocation(filter.getLocation()))
+                .and(JobSpecification.hasJobType(filter.getJobType()))
+                .and(JobSpecification.hasStatus(filter.getStatus()))
+                .and(JobSpecification.hasEmployer(filter.getEmployerId()));
+
+        Page<Job> jobPage = jobRepository.findAll(spec, pageable);
+
+        return PageResponse.<Job>builder()
+                .content(jobPage.getContent())
+                .page(jobPage.getNumber())
+                .size(jobPage.getSize())
+                .totalElements(jobPage.getTotalElements())
+                .totalPages(jobPage.getTotalPages())
+                .build();
+    }
+
 
 
 }

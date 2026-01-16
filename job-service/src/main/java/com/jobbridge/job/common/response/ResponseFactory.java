@@ -6,35 +6,26 @@ import java.time.LocalDateTime;
 
 public class ResponseFactory {
 
-    public static <T> ApiResponse<T> success(T data) {
-        return buildResponse(HttpStatus.OK.value(), "Success", data, null);
-    }
-
-    public static <T> ApiResponse<T> success(T data, String message) {
-        return buildResponse(HttpStatus.OK.value(), message, data, null);
-    }
-
-    public static ApiResponse<?> successMessage(String message) {
-        return buildResponse(HttpStatus.OK.value(), message, null, null);
-    }
-
-    public static ApiResponse<?> error(String message, int status, Object errors) {
-        return buildResponse(status, message, null, errors);
-    }
-
-    private static <T> ApiResponse<T> buildResponse(
-            int status,
-            String message,
-            T data,
-            Object errors
-    ) {
-        return ApiResponse.<T>builder()
-                .meta(Meta.builder()
-                        .status(status)
-                        .message(message)
-                        .timestamp(LocalDateTime.now())
-                        .build())
+    public static <T> ApiResponseDTO<T> success(T data, String message) {
+        return ApiResponseDTO.<T>builder()
+                .meta(new Meta(200, message, LocalDateTime.now()))
                 .data(data)
+                .errors(null)
+                .build();
+    }
+
+    public static ApiResponseDTO<?> successMessage(String message) {
+        return ApiResponseDTO.builder()
+                .meta(new Meta(200, message, LocalDateTime.now()))
+                .data(null)
+                .errors(null)
+                .build();
+    }
+
+    public static ApiResponseDTO<?> error(String message, Object errors) {
+        return ApiResponseDTO.builder()
+                .meta(new Meta(400, message, LocalDateTime.now()))
+                .data(null)
                 .errors(errors)
                 .build();
     }
