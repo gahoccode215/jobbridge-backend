@@ -1,5 +1,6 @@
 package com.jobbridge.job.application.service.impl;
 
+import com.jobbridge.job.application.dto.request.ApplicationFilterRequest;
 import com.jobbridge.job.application.dto.request.ApplyJobRequest;
 import com.jobbridge.job.application.dto.request.RejectApplicationRequest;
 import com.jobbridge.job.application.dto.response.ApplicationResponse;
@@ -7,10 +8,16 @@ import com.jobbridge.job.application.entity.Application;
 import com.jobbridge.job.application.enums.ApplicationStatus;
 import com.jobbridge.job.application.repository.ApplicationRepository;
 import com.jobbridge.job.application.service.ApplicationService;
+import com.jobbridge.job.application.specification.ApplicationSpecification;
+import com.jobbridge.job.common.response.PageResponse;
 import com.jobbridge.job.job.entity.Job;
 import com.jobbridge.job.job.enums.JobStatus;
 import com.jobbridge.job.job.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -134,6 +141,37 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public List<ApplicationResponse> getByCandidate(String candidateId) {
         return List.of();
+    }
+
+
+
+    @Override
+    public PageResponse<ApplicationResponse> filterApplications(
+            ApplicationFilterRequest filter,
+            int page,
+            int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Specification<Application> spec =
+                ApplicationSpecification.filter(filter);
+
+        Page<Application> applicationPage =
+                repository.findAll(spec, pageable);
+
+        List<ApplicationResponse> responses =
+                applicationPage.getContent()
+                        .stream()
+                        .map(this::toResponse)
+                        .toList();
+
+        return PageResponse.<ApplicationResponse>builder()
+                .content(responses)
+                .page(page)
+                .size(size)
+                .totalElements(applicationPage.getTotalElements())
+                .totalPages(applicationPage.getTotalPages())
+                .build();
     }
 
     private ApplicationResponse toResponse(Application app) {

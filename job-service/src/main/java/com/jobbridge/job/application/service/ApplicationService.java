@@ -1,8 +1,10 @@
 package com.jobbridge.job.application.service;
 
+import com.jobbridge.job.application.dto.request.ApplicationFilterRequest;
 import com.jobbridge.job.application.dto.request.ApplyJobRequest;
 import com.jobbridge.job.application.dto.request.RejectApplicationRequest;
 import com.jobbridge.job.application.dto.response.ApplicationResponse;
+import com.jobbridge.job.common.response.PageResponse;
 
 import java.util.List;
 
@@ -23,5 +25,11 @@ public interface ApplicationService {
     List<ApplicationResponse> getByEmployer(String employerId);
 
     List<ApplicationResponse> getByCandidate(String candidateId);
+
+    PageResponse<ApplicationResponse> filterApplications(
+            ApplicationFilterRequest filter,
+            int page,
+            int size
+    );
 }
 
