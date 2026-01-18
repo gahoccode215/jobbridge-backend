@@ -12,7 +12,10 @@ import com.jobbridge.job.job.enums.JobStatus;
 import com.jobbridge.job.job.enums.JobType;
 import com.jobbridge.job.job.service.JobService;
 import com.jobbridge.job.search.document.JobDocument;
+import com.jobbridge.job.search.dto.JobSearchRequest;
+import com.jobbridge.job.search.dto.JobSearchResponse;
 import com.jobbridge.job.search.service.JobSearchService;
+import com.jobbridge.job.search.service.JobSuggestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +28,7 @@ public class JobController {
 
     private final JobService jobService;
     private final JobSearchService jobSearchService;
+    private final JobSuggestionService jobSuggestionService;
 
     @PostMapping
     public ApiResponseDTO<?> createJob(@RequestBody JobCreateRequest request) {
@@ -76,13 +80,47 @@ public class JobController {
 
 
     @GetMapping("/search")
-    public ApiResponseDTO<List<JobDocument>> searchJobs(
-            @RequestParam String keyword) {
+    public ApiResponseDTO<JobSearchResponse> searchJobs(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String jobType,
+            @RequestParam(required = false) Double salaryFrom,
+            @RequestParam(required = false) Double salaryTo,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
 
-        List<JobDocument> result = jobSearchService.search(keyword);
+        JobSearchRequest request = new JobSearchRequest();
 
-        return ResponseFactory.success(result, "Tìm kiếm tin tuyển dụng thành công");
+        request.setKeyword(keyword);
+        request.setLocation(location);
+        request.setJobType(jobType);
+        request.setSalaryFrom(salaryFrom);
+        request.setSalaryTo(salaryTo);
+        request.setPage(page);
+        request.setSize(size);
+
+        var result = jobSearchService.search(request);
+
+        return ResponseFactory.success(
+                result,
+                "Tìm kiếm tin tuyển dụng thành công"
+        );
     }
+
+    @GetMapping("/suggest")
+    public ApiResponseDTO<List<String>> suggest(
+            @RequestParam String keyword
+    ) {
+
+        List<String> result = jobSuggestionService.suggest(keyword);
+
+        return ResponseFactory.success(
+                result,
+                "Lấy danh sách gợi ý thành công"
+        );
+    }
+
 
     @PutMapping("/{id}/submit")
     public ApiResponseDTO<?> submitJob(@PathVariable Long id) {

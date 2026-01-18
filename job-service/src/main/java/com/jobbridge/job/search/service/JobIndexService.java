@@ -4,7 +4,10 @@ import com.jobbridge.job.job.entity.Job;
 import com.jobbridge.job.search.document.JobDocument;
 import com.jobbridge.job.search.repository.JobSearchRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.elasticsearch.core.suggest.Completion;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ public class JobIndexService {
                 .jobType(job.getJobType())
                 .employerId(job.getEmployerId())
                 .expiredAt(job.getExpiredAt().toLocalDate())
+                .suggest(new Completion(List.of(job.getTitle())))
                 .build();
 
         repository.save(doc);

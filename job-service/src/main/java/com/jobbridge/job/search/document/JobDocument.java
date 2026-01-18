@@ -3,9 +3,11 @@ package com.jobbridge.job.search.document;
 import com.jobbridge.job.job.enums.JobType;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.CompletionField;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.core.suggest.Completion;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,4 +39,7 @@ public class JobDocument {
 
     @Field(type = FieldType.Date)
     private LocalDate expiredAt;
+
+    @CompletionField
+    private Completion suggest;
 }
